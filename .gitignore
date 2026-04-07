@@ -39,3 +39,21 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# IDE - Specific (Keeps your VS Code settings out of the repo)
+.vscode/
+.idea/
+*.iml
+
+# Logs
+logs
+*.log
+
+# Byte-compiled / Python (If you use any scripts for your DBjson)
+__pycache__/
+*.py[cod]
+
+# Lockfile check (Optional)
+# If you are the only developer, keeping both package-lock.json 
+# and yarn.lock is redundant. Pick one and ignore the other, 
+# though most people keep both in the repo.

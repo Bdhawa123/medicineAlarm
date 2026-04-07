@@ -1,0 +1,196 @@
+{
+  "medications": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "Amoxicillin",
+      "dosage": "500mg",
+      "instructions": "Take with full glass of water",
+      "color": "#4A90E2",
+      "icon": "pill",
+      "inventory": { "remaining": 12, "total": 21, "refillAlertThreshold": 3 },
+      "schedule": {
+        "type": "interval",
+        "intervalHours": 8,
+        "startDateTime": "2026-04-07T08:00:00Z",
+        "activeDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      },
+      "notificationConfig": { "isCritical": true, "snoozeIntervalMinutes": 5 },
+      "lastTaken": "2026-04-07T08:05:00Z",
+      "nextScheduled": "2026-04-07T16:00:00Z"
+    },
+    {
+      "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "name": "Atorvastatin",
+      "dosage": "20mg",
+      "instructions": "Take before bed",
+      "color": "#F5A623",
+      "icon": "tablet",
+      "inventory": { "remaining": 25, "total": 30, "refillAlertThreshold": 7 },
+      "schedule": {
+        "type": "fixed",
+        "reminders": ["21:00"],
+        "activeDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      },
+      "notificationConfig": {
+        "isCritical": false,
+        "snoozeIntervalMinutes": 15
+      },
+      "lastTaken": "2026-04-06T21:02:00Z",
+      "nextScheduled": "2026-04-07T21:00:00Z"
+    },
+    {
+      "id": "11d2e5a1-3a22-4c2a-8f55-01b33d456789",
+      "name": "Metformin",
+      "dosage": "500mg",
+      "instructions": "Take with breakfast and dinner",
+      "color": "#7ED321",
+      "icon": "capsule",
+      "inventory": { "remaining": 40, "total": 60, "refillAlertThreshold": 10 },
+      "schedule": {
+        "type": "fixed",
+        "reminders": ["08:30", "19:00"],
+        "activeDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      },
+      "notificationConfig": { "isCritical": true, "snoozeIntervalMinutes": 10 },
+      "lastTaken": "2026-04-07T08:45:00Z",
+      "nextScheduled": "2026-04-07T19:00:00Z"
+    },
+    {
+      "id": "a1b2c3d4-e5f6-4a5b-bcde-f1e2d3c4b5a6",
+      "name": "Lisinopril",
+      "dosage": "10mg",
+      "instructions": "Avoid excessive potassium intake",
+      "color": "#D0021B",
+      "icon": "pill",
+      "inventory": { "remaining": 15, "total": 30, "refillAlertThreshold": 5 },
+      "schedule": {
+        "type": "fixed",
+        "reminders": ["07:00"],
+        "activeDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      },
+      "notificationConfig": { "isCritical": true, "snoozeIntervalMinutes": 5 },
+      "lastTaken": "2026-04-07T07:10:00Z",
+      "nextScheduled": "2026-04-08T07:00:00Z"
+    },
+    {
+      "id": "f2a3b4c5-d6e7-4f8g-9h0i-j1k2l3m4n5o6",
+      "name": "Vitamin D3",
+      "dosage": "2000 IU",
+      "instructions": "Take with a fat-containing meal",
+      "color": "#F8E71C",
+      "icon": "softgel",
+      "inventory": {
+        "remaining": 80,
+        "total": 100,
+        "refillAlertThreshold": 10
+      },
+      "schedule": {
+        "type": "fixed",
+        "reminders": ["12:00"],
+        "activeDays": ["Mon", "Wed", "Fri"]
+      },
+      "notificationConfig": {
+        "isCritical": false,
+        "snoozeIntervalMinutes": 30
+      },
+      "lastTaken": "2026-04-06T12:05:00Z",
+      "nextScheduled": "2026-04-08T12:00:00Z"
+    },
+    {
+      "id": "e4d5c6b7-a8b9-4c0d-e1f2-3g4h5i6j7k8l",
+      "name": "Albuterol Inhaler",
+      "dosage": "2 puffs",
+      "instructions": "Rinse mouth after use",
+      "color": "#50E3C2",
+      "icon": "inhaler",
+      "inventory": {
+        "remaining": 180,
+        "total": 200,
+        "refillAlertThreshold": 20
+      },
+      "schedule": {
+        "type": "prn",
+        "reminders": [],
+        "activeDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      },
+      "notificationConfig": { "isCritical": true, "snoozeIntervalMinutes": 0 },
+      "lastTaken": "2026-04-07T14:30:00Z",
+      "nextScheduled": null
+    },
+    {
+      "id": "9a8b7c6d-5e4f-3g2h-1i0j-k9l8m7n6o5p4",
+      "name": "Levothyroxine",
+      "dosage": "75mcg",
+      "instructions": "Take on empty stomach, 30 min before food",
+      "color": "#BD10E0",
+      "icon": "tablet",
+      "inventory": { "remaining": 10, "total": 90, "refillAlertThreshold": 14 },
+      "schedule": {
+        "type": "fixed",
+        "reminders": ["06:30"],
+        "activeDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      },
+      "notificationConfig": { "isCritical": true, "snoozeIntervalMinutes": 10 },
+      "lastTaken": "2026-04-07T06:35:00Z",
+      "nextScheduled": "2026-04-08T06:30:00Z"
+    },
+    {
+      "id": "z1x2c3v4-b5n6-m7l8-k9j0-h1g2f3e4d5s6",
+      "name": "Ibuprofen",
+      "dosage": "400mg",
+      "instructions": "Take for back pain, max 3 times a day",
+      "color": "#9B9B9B",
+      "icon": "pill",
+      "inventory": { "remaining": 45, "total": 50, "refillAlertThreshold": 5 },
+      "schedule": {
+        "type": "interval",
+        "intervalHours": 6,
+        "startDateTime": null,
+        "activeDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      },
+      "notificationConfig": {
+        "isCritical": false,
+        "snoozeIntervalMinutes": 20
+      },
+      "lastTaken": "2026-04-07T11:00:00Z",
+      "nextScheduled": "2026-04-07T17:00:00Z"
+    },
+    {
+      "id": "q1w2e3r4-t5y6-u7i8-o9p0-a1s2d3f4g5h6",
+      "name": "Warfarin",
+      "dosage": "5mg",
+      "instructions": "Check with doctor before taking aspirin",
+      "color": "#417505",
+      "icon": "tablet",
+      "inventory": { "remaining": 12, "total": 30, "refillAlertThreshold": 7 },
+      "schedule": {
+        "type": "fixed",
+        "reminders": ["18:00"],
+        "activeDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      },
+      "notificationConfig": { "isCritical": true, "snoozeIntervalMinutes": 5 },
+      "lastTaken": "2026-04-06T18:00:00Z",
+      "nextScheduled": "2026-04-07T18:00:00Z"
+    },
+    {
+      "id": "m9n8b7v6-c5x4-z3a2-s1d0-f9g8h7j6k5l4",
+      "name": "Sertraline",
+      "dosage": "50mg",
+      "instructions": "Take at the same time each morning",
+      "color": "#9013FE",
+      "icon": "capsule",
+      "inventory": { "remaining": 22, "total": 30, "refillAlertThreshold": 5 },
+      "schedule": {
+        "type": "fixed",
+        "reminders": ["09:00"],
+        "activeDays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      },
+      "notificationConfig": {
+        "isCritical": false,
+        "snoozeIntervalMinutes": 15
+      },
+      "lastTaken": "2026-04-07T09:10:00Z",
+      "nextScheduled": "2026-04-08T09:00:00Z"
+    }
+  ]
+}
