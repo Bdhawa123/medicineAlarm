@@ -42,38 +42,38 @@ const MedicationCard = ({ item, index, onDelete }) => {
 
   return (
     <View style={styles.card}>
-      <TouchableOpacity onPress={toggleExpand} activeOpacity={0.8}>
-        <View style={styles.headerRow}>
-          <View style={styles.indexContainer}>
-            <Text style={styles.indexText}>{index + 1}</Text>
-          </View>
-          <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>{item.name}</Text>
-            <Text style={styles.dosageText}>{item.dosage}</Text>
-          </View>
+      <View style={styles.headerRow}>
+        <View style={styles.indexContainer}>
+          <Text style={styles.indexText}>{index + 1}</Text>
+        </View>
+        <View style={styles.nameContainer}>
+          <Text style={styles.nameText}>{item.name}</Text>
+          <Text style={styles.dosageText}>{item.dosage}</Text>
+        </View>
+        <TouchableOpacity onPress={toggleExpand} activeOpacity={0.8}>
           <MaterialIcons
             name={expanded ? "keyboard-arrow-up" : "keyboard-arrow-down"}
             size={24}
             color="#666"
           />
-        </View>
+        </TouchableOpacity>
+      </View>
 
-        {/* 3. The Animated View wraps the content */}
-        <Animated.View
-          style={{ height: bodyHeight, opacity: opacity, overflow: "hidden" }}
+      {/* 3. The Animated View wraps the content */}
+      <Animated.View
+        style={{ height: bodyHeight, opacity: opacity, overflow: "hidden" }}
+      >
+        <View style={styles.divider} />
+        <Text style={styles.label}>INSTRUCTIONS</Text>
+        <Text style={styles.descriptionText}>{item.instructions}</Text>
+        <TouchableOpacity
+          onPress={() => onDelete(item.id)}
+          style={styles.deleteBtn}
         >
-          <View style={styles.divider} />
-          <Text style={styles.label}>INSTRUCTIONS</Text>
-          <Text style={styles.descriptionText}>{item.instructions}</Text>
-          <TouchableOpacity
-            onPress={() => onDelete(item.id)}
-            style={styles.deleteBtn}
-          >
-            <MaterialIcons name="delete" size={20} color="#FF5252" />
-            <Text style={{ color: "#FF5252", marginLeft: 5 }}>Remove</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </TouchableOpacity>
+          <MaterialIcons name="delete" size={20} color="#FF5252" />
+          <Text style={{ color: "#FF5252", marginLeft: 5 }}>Remove</Text>
+        </TouchableOpacity>
+      </Animated.View>
     </View>
   );
 };

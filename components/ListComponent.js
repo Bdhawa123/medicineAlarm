@@ -7,9 +7,11 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import MedicationCard from "./MedicationCard";
 
 const ListComponent = ({ data }) => {
+  const navigation = useNavigation();
   // This prevents the "Cannot read property 'medications' of undefined" crash.
 
   if (!data || data.length === 0 || !data[0]?.medications) {
@@ -26,37 +28,17 @@ const ListComponent = ({ data }) => {
         data={data[0].medications}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item, index }) => (
-          <MedicationCard
-            item={item}
-            index={index}
-            onDelete={(id) => console.log("Deleting:", id)}
-          />
-
-          //   <TouchableOpacity>
-          //     <View style={styles.card}>
-          //       <View style={styles.indexContainer}>
-          //         <Text style={styles.indexText}>{index + 1}</Text>
-          //       </View>
-
-          //       <View style={styles.infoContainer}>
-          //         <Text style={styles.nameText}>{item.name}</Text>
-          //         <Text style={styles.dosageText}>
-          //           {item.dosage} • {item.frequency}
-          //         </Text>
-          //       </View>
-
-          //       <TouchableOpacity
-          //         onPress={() => console.log("Delete ID:", item.id)}
-          //         style={styles.deleteButton}
-          //       >
-          //         <MaterialIcons
-          //           name="delete-outline"
-          //           size={24}
-          //           color="#ff5252"
-          //         />
-          //       </TouchableOpacity>
-          //     </View>
-          //   </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("MedicationDetail", { med: item })
+            }
+          >
+            <MedicationCard
+              item={item}
+              index={index}
+              onDelete={(id) => console.log("Deleting:", id)}
+            />
+          </TouchableOpacity>
         )}
         contentContainerStyle={styles.listContent}
       />
