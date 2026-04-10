@@ -42,6 +42,14 @@ const ScheduleSection = ({ form, updateNested, setForm }) => {
     }
   };
 
+  const toggleDay = (day) => {
+    const currentDays = form.schedule.activeDays || [];
+    const newDays = currentDays.includes(day)
+      ? currentDays.filter((d) => d !== day)
+      : [...currentDays, day];
+    updateNested("schedule", "activeDays", newDays);
+  };
+
   // 2. Fixed setIntervalTime: No quotes, correct variable path
   const setIntervalTime = (Interval) => {
     const intervalNum = parseInt(Interval, 10);
@@ -120,6 +128,23 @@ const ScheduleSection = ({ form, updateNested, setForm }) => {
       </View>
 
       {/* Active Days Multi-Select code remains the same... */}
+      <Text style={styles.smallLabel}>Repeat on</Text>
+      <View style={styles.daysContainer}>
+        {DAYS.map((day) => {
+          const isActive = form.schedule.activeDays.includes(day);
+          return (
+            <TouchableOpacity
+              key={day}
+              onPress={() => toggleDay(day)}
+              style={[styles.dayChip, isActive && styles.dayChipActive]}
+            >
+              <Text style={[styles.dayText, isActive && styles.dayTextActive]}>
+                {day}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 };
