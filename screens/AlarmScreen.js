@@ -6,13 +6,13 @@ import ListComponent from "../components/ListComponent";
 import MedicationCard from "../components/MedicationCard";
 import DBjson from "../mockDB/DBjson.json";
 
-const AlarmScreen = () => {
+const AlarmScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.appWrapper}>
       <ListComponent data={[DBjson]} />
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => console.log("Navigate to Create Alarm")}
+        onPress={() => navigation.navigate("AddMedication")}
         activeOpacity={0.8}
       >
         <Entypo name="plus" size={20} color="white" />

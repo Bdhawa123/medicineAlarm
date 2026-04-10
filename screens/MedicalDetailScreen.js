@@ -38,7 +38,9 @@ const MedicationDetail = ({ route, navigation }) => {
           <MaterialIcons name="arrow-back-ios" size={24} color="#333" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Medication Info</Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("EditMedication", { med })}
+        >
           <MaterialIcons name="edit" size={24} color="#2196f3" />
         </TouchableOpacity>
       </View>
