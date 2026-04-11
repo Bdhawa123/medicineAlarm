@@ -1,17 +1,20 @@
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, Text, TextInput } from "react-native";
+import React, { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { registerForPushNotificationsAsync } from "./utils/notifications";
+
 import AlarmScreen from "./screens/AlarmScreen";
 import MedicationDetail from "./screens/MedicalDetailScreen";
+import AddMedicationScreen from "./screens/AddMedicationScreen";
 import MedicationEditScreen from "./screens/MedicationEditScreen";
+
+import { Provider as MedicationProvider } from "./context/MedicationContext";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { Provider as MedicationProvider } from "./context/MedicationContext";
-import AddMedicationScreen from "./screens/AddMedicationScreen";
 
 const Stack = createNativeStackNavigator();
 
-// To force scaling across the whole app:
 if (Text.defaultProps) {
   Text.defaultProps.allowFontScaling = true;
 } else {
@@ -25,6 +28,10 @@ if (TextInput.defaultProps) {
 }
 
 export default function App() {
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <MedicationProvider>

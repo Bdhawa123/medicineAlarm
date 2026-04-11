@@ -1,4 +1,4 @@
-import React, { useReducer, createContext, Children } from "react";
+import React, { useReducer, createContext, useMemo } from "react";
 
 export default (reducer, actions, defaultValue) => {
   const Context = createContext();
@@ -6,13 +6,21 @@ export default (reducer, actions, defaultValue) => {
   const Provider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, defaultValue);
 
-    const boundActions = {};
-    for (let key in actions) {
-      boundActions[key] = actions[key](dispatch);
-    }
+    const boundActions = useMemo(() => {
+      const bound = {};
+      for (let key in actions) {
+        bound[key] = actions[key](dispatch);
+      }
+      return bound;
+    }, []);
+
+    const contextValue = useMemo(
+      () => ({ state, ...boundActions }),
+      [state, boundActions]
+    );
 
     return (
-      <Context.Provider value={{ state, ...boundActions }}>
+      <Context.Provider value={contextValue}>
         {children}
       </Context.Provider>
     );

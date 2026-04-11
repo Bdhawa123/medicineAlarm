@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,12 +9,19 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import MedicationCard from "./MedicationCard";
 import { Context as MedicationContext } from "../context/MedicationContext";
+import { resyncAllMedicationAlarms } from "../utils/notifications";
 
 const ListComponent = () => {
   const navigation = useNavigation();
   const {
     state: { medications },
   } = useContext(MedicationContext);
+
+  useEffect(() => {
+    if (medications && medications.length > 0) {
+      resyncAllMedicationAlarms(medications);
+    }
+  }, [medications]);
 
   // This prevents the "Cannot read property 'medications' of undefined" crash.
 

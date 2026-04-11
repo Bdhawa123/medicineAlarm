@@ -43,7 +43,6 @@ const MedicationForm = ({ form, setForm, updateNested }) => {
             }
           />
         </View>
-        <View style={{ width: 20 }} />
         <View style={styles.flex1}>
           <TextInput
             style={styles.input}
@@ -57,7 +56,7 @@ const MedicationForm = ({ form, setForm, updateNested }) => {
         </View>
       </View>
 
-      {/* SCHEDULE SECTION (Reused) */}
+
       <ScheduleSection
         form={form}
         setForm={setForm}
@@ -107,9 +106,8 @@ const styles = StyleSheet.create({
     borderColor: "#E1E8ED",
   },
   textArea: { height: 100, textAlignVertical: "top" },
-  row: { flexDirection: "row" },
+  row: { flexDirection: "row", gap: 15 },
   flex1: { flex: 1 },
 });
 
-// ... Reuse your existing styles here ...
 export default MedicationForm;

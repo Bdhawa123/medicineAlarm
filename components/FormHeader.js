@@ -1,19 +1,17 @@
-import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const FormHeader = ({ title, onSave, onCancel, actionText = "Save" }) => {
   return (
     <View style={styles.header}>
-      {/* Cancel/Close Button */}
+
       <TouchableOpacity onPress={onCancel} style={styles.iconContainer}>
         <MaterialIcons name="close" size={24} color="#333" />
       </TouchableOpacity>
 
-      {/* Dynamic Title */}
+
       <Text style={styles.headerTitle}>{title}</Text>
 
-      {/* Action/Save Button */}
       <TouchableOpacity onPress={onSave} style={styles.actionContainer}>
         <Text style={styles.actionBtn}>{actionText}</Text>
       </TouchableOpacity>

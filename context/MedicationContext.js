@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext } from "react";
-import initialData from "../mockDB/DBjson.json"; // Import your current JSON here
+import initialData from "../mockDB/DBjson.json";
 import createDataContext from "./createDataContext";
+import { scheduleMedicationAlarm, cancelMedicationAlarm } from "../utils/notifications";
 
 const medicationReducer = (state, action) => {
   switch (action.type) {
@@ -33,14 +34,17 @@ const medicationReducer = (state, action) => {
 
 const addMedication = (dispatch) => (newMed) => {
   dispatch({ type: "ADD_MEDICATION", payload: newMed });
+  scheduleMedicationAlarm(newMed);
 };
 
 const editMedication = (dispatch) => (updatedMed) => {
   dispatch({ type: "EDIT_MEDICATION", payload: updatedMed });
+  scheduleMedicationAlarm(updatedMed);
 };
 
 const deleteMedication = (dispatch) => (id) => {
   dispatch({ type: "DELETE_MEDICATION", payload: { id } });
+  cancelMedicationAlarm(id);
 };
 const INITIAL_EMPTY_STATE = {
   id: Math.random().toString(36).substr(2, 9),

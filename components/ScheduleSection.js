@@ -91,9 +91,9 @@ const ScheduleSection = ({ form, updateNested, setForm }) => {
             <Text style={{ color: form.lastTaken ? "#333" : "#aaa" }}>
               {form.lastTaken
                 ? new Date(form.lastTaken).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
                 : "Select Start Time"}
             </Text>
           </TouchableOpacity>

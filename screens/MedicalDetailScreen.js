@@ -10,8 +10,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Context as MedicationContext } from "../context/MedicationContext";
 import {
   MaterialIcons,
-  FontAwesome5,
-  CommunityIcons,
 } from "@expo/vector-icons";
 
 const MedicationDetail = ({ route, navigation }) => {
@@ -39,7 +37,7 @@ const MedicationDetail = ({ route, navigation }) => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
+
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-back-ios" size={24} color="#333" />

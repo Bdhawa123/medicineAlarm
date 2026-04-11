@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,28 +8,24 @@ import {
 } from "react-native";
 
 const CriticalToggle = ({ isCritical, onValueChange }) => {
-  // 1. Setup the animated value (0 for false, 1 for true)
   const animatedValue = useRef(new Animated.Value(isCritical ? 1 : 0)).current;
 
-  // 2. Run the animation whenever the value changes
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: isCritical ? 1 : 0,
       duration: 300,
-      useNativeDriver: false, // Background color doesn't support native driver
+      useNativeDriver: false,
     }).start();
   }, [isCritical]);
 
-  // 3. Interpolate background color: Gray -> Red
   const backgroundColor = animatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: ["#E1E8ED", "#FF5252"],
   });
 
-  // 4. Interpolate the circle position
   const translateX = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [2, 26], // Moves the circle across the track
+    outputRange: [2, 26],
   });
 
   return (

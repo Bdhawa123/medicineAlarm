@@ -1,21 +1,27 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Animated,
+  Platform,
+  UIManager,
+  Animated
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Context as MedicationContext } from "../context/MedicationContext";
 
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
 const MedicationCard = ({ item, index, onDelete }) => {
-  console.log("Rendering MedicationCard for:", item.id);
+
   const {
     state: { medications },
   } = useContext(MedicationContext);
-
   const med = medications.find((m) => m.id === item.id);
+
   const [expanded, setExpanded] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
@@ -36,7 +42,6 @@ const MedicationCard = ({ item, index, onDelete }) => {
     setExpanded(!expanded);
   };
 
-  // 2. Interpolate values for height and opacity
   const bodyHeight = animatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 100], // Adjust 100 to fit your content
@@ -66,7 +71,6 @@ const MedicationCard = ({ item, index, onDelete }) => {
         </TouchableOpacity>
       </View>
 
-      {/* 3. The Animated View wraps the content */}
       <Animated.View
         style={{ height: bodyHeight, opacity: opacity, overflow: "hidden" }}
       >
