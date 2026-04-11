@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import {
   View,
   Text,
@@ -7,8 +7,15 @@ import {
   Animated,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Context as MedicationContext } from "../context/MedicationContext";
 
 const MedicationCard = ({ item, index, onDelete }) => {
+  console.log("Rendering MedicationCard for:", item.id);
+  const {
+    state: { medications },
+  } = useContext(MedicationContext);
+
+  const med = medications.find((m) => m.id === item.id);
   const [expanded, setExpanded] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
@@ -47,8 +54,8 @@ const MedicationCard = ({ item, index, onDelete }) => {
           <Text style={styles.indexText}>{index + 1}</Text>
         </View>
         <View style={styles.nameContainer}>
-          <Text style={styles.nameText}>{item.name}</Text>
-          <Text style={styles.dosageText}>{item.dosage}</Text>
+          <Text style={styles.nameText}>{med.name}</Text>
+          <Text style={styles.dosageText}>{med.dosage}</Text>
         </View>
         <TouchableOpacity onPress={toggleExpand} activeOpacity={0.8}>
           <MaterialIcons
@@ -65,9 +72,9 @@ const MedicationCard = ({ item, index, onDelete }) => {
       >
         <View style={styles.divider} />
         <Text style={styles.label}>INSTRUCTIONS</Text>
-        <Text style={styles.descriptionText}>{item.instructions}</Text>
+        <Text style={styles.descriptionText}>{med.instructions}</Text>
         <TouchableOpacity
-          onPress={() => onDelete(item.id)}
+          onPress={() => onDelete(med.id)}
           style={styles.deleteBtn}
         >
           <MaterialIcons name="delete" size={20} color="#FF5252" />

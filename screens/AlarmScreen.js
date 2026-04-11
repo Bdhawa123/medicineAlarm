@@ -1,15 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Entypo } from "@expo/vector-icons";
 import ListComponent from "../components/ListComponent";
-import MedicationCard from "../components/MedicationCard";
-import DBjson from "../mockDB/DBjson.json";
 
 const AlarmScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.appWrapper}>
-      <ListComponent data={[DBjson]} />
+      <ListComponent />
       <TouchableOpacity
         style={styles.fab}
         onPress={() => navigation.navigate("AddMedication")}

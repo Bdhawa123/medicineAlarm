@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-// 1. Import your shared components
 import FormHeader from "../components/FormHeader";
 import MedicationForm from "../components/MedicationForm";
+import { Context as MedicationContext } from "../context/MedicationContext";
 
 const MedicationEditScreen = ({ route, navigation }) => {
   // 2. Grab the medication data passed from the list/detail screen
   const { med } = route.params;
 
-  // 3. Initialize state with the existing medication object
+  const { editMedication } = useContext(MedicationContext);
   const [form, setForm] = useState({ ...med });
 
   // 4. Logic to update nested objects (inventory, schedule, etc.)
@@ -26,17 +25,9 @@ const MedicationEditScreen = ({ route, navigation }) => {
 
   const handleUpdate = () => {
     // Basic Validation
-    if (!form.name.trim()) {
-      Alert.alert("Error", "Medication name cannot be empty.");
-      return;
-    }
+    editMedication(form);
 
-    // This is where you'd trigger your save function/API
-    console.log("Saving updated medication:", form);
-
-    Alert.alert("Success", "Changes saved!", [
-      { text: "OK", onPress: () => navigation.goBack() },
-    ]);
+    navigation.goBack();
   };
 
   return (

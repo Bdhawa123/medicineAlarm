@@ -5,6 +5,8 @@ import MedicationDetail from "./screens/MedicalDetailScreen";
 import MedicationEditScreen from "./screens/MedicationEditScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import { Provider as MedicationProvider } from "./context/MedicationContext";
 import AddMedicationScreen from "./screens/AddMedicationScreen";
 
 const Stack = createNativeStackNavigator();
@@ -25,17 +27,25 @@ if (TextInput.defaultProps) {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="AlarmScreen" component={AlarmScreen} />
-          <Stack.Screen name="MedicationDetail" component={MedicationDetail} />
-          <Stack.Screen
-            name="EditMedication"
-            component={MedicationEditScreen}
-          />
-          <Stack.Screen name="AddMedication" component={AddMedicationScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <MedicationProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="AlarmScreen" component={AlarmScreen} />
+            <Stack.Screen
+              name="MedicationDetail"
+              component={MedicationDetail}
+            />
+            <Stack.Screen
+              name="EditMedication"
+              component={MedicationEditScreen}
+            />
+            <Stack.Screen
+              name="AddMedication"
+              component={AddMedicationScreen}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </MedicationProvider>
     </SafeAreaProvider>
   );
 }

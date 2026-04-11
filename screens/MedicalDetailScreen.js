@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Context as MedicationContext } from "../context/MedicationContext";
 import {
   MaterialIcons,
   FontAwesome5,
@@ -14,7 +15,13 @@ import {
 } from "@expo/vector-icons";
 
 const MedicationDetail = ({ route, navigation }) => {
-  const { med } = route.params;
+  const { med, onGoBack } = route.params;
+
+  const {
+    state: { medications },
+  } = useContext(MedicationContext);
+
+  const medSelected = medications.find((medSel) => medSel.id === med.id);
 
   const formatTime = (isoString) => {
     if (!isoString) return "Not set";
@@ -37,9 +44,12 @@ const MedicationDetail = ({ route, navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-back-ios" size={24} color="#333" />
         </TouchableOpacity>
+
         <Text style={styles.headerTitle}>Medication Info</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate("EditMedication", { med })}
+          onPress={() =>
+            navigation.navigate("EditMedication", { med: medSelected })
+          }
         >
           <MaterialIcons name="edit" size={24} color="#2196f3" />
         </TouchableOpacity>
@@ -48,10 +58,10 @@ const MedicationDetail = ({ route, navigation }) => {
       <ScrollView contentContainerStyle={styles.content}>
         {/* Main Info Section */}
         <View style={styles.mainInfo}>
-          <Text style={styles.medName}>{med.name}</Text>
-          <Text style={styles.medType}>
-            {med.dosage} • {med.type}
-          </Text>
+          <Text style={styles.medName}>{medSelected.name}</Text>
+          <Text style={styles.medType}>{medSelected.dosage}</Text>
+
+          <Text style={styles.medType}>{medSelected.instructions}</Text>
         </View>
 
         {/* Stats Grid: Inventory & Progress */}
@@ -61,7 +71,8 @@ const MedicationDetail = ({ route, navigation }) => {
 
             {/* Access 'remaining' and 'total' from the object */}
             <Text style={styles.statValue}>
-              {med.inventory?.remaining} / {med.inventory?.total}
+              {medSelected.inventory?.remaining} /{" "}
+              {medSelected.inventory?.total}
             </Text>
 
             <Text style={styles.statLabel}>Inventory Left</Text>
@@ -70,7 +81,7 @@ const MedicationDetail = ({ route, navigation }) => {
           <View style={styles.statCard}>
             <MaterialIcons name="event-available" size={20} color="#4CAF50" />
             <Text style={styles.statValue}>
-              {med.schedule?.activeDays?.join(", ") || "None"}
+              {medSelected.schedule?.activeDays?.join(", ") || "None"}
             </Text>
             <Text style={styles.statLabel}>Active Days</Text>
           </View>
@@ -92,7 +103,7 @@ const MedicationDetail = ({ route, navigation }) => {
               <Text style={styles.timelineLabel}>Next Scheduled</Text>
               <Text style={styles.timelineValue}>
                 {/* If it's an object, get the .time property. If it's a string, use it directly */}
-                {formatTime(med.nextScheduled) || "Not set"}
+                {formatTime(medSelected.nextScheduled) || "Not set"}
               </Text>
             </View>
           </View>
@@ -104,7 +115,7 @@ const MedicationDetail = ({ route, navigation }) => {
             <View>
               <Text style={styles.timelineLabel}>Last Taken</Text>
               <Text style={styles.timelineValue}>
-                {formatTime(med.lastTaken) || "Never"}
+                {formatTime(medSelected.lastTaken) || "Never"}
               </Text>
             </View>
           </View>
@@ -114,12 +125,12 @@ const MedicationDetail = ({ route, navigation }) => {
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>Instructions</Text>
           <Text style={styles.descriptionText}>
-            {med.instructions ||
+            {medSelected.instructions ||
               "No specific instructions provided for this medication."}
           </Text>
         </View>
 
-        {med.notificationConfig?.isCritical && (
+        {medSelected.notificationConfig?.isCritical && (
           <View style={styles.criticalBox}>
             <MaterialIcons name="warning" size={20} color="#D32F2F" />
             <Text style={styles.criticalText}>CRITICAL MEDICATION</Text>
@@ -144,7 +155,7 @@ const styles = StyleSheet.create({
   content: { padding: 20 },
   mainInfo: { marginBottom: 25 },
   medName: { fontSize: 28, fontWeight: "bold", color: "#1a1a1a" },
-  medType: { fontSize: 16, color: "#777", marginTop: 4 },
+  medType: { fontSize: 16, color: "#777", marginTop: 5, marginBottom: 5 },
 
   statsGrid: {
     flexDirection: "row",

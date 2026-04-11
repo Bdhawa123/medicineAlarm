@@ -1,5 +1,4 @@
-import React from "react";
-import { MaterialIcons } from "@expo/vector-icons";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -9,12 +8,17 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import MedicationCard from "./MedicationCard";
+import { Context as MedicationContext } from "../context/MedicationContext";
 
-const ListComponent = ({ data }) => {
+const ListComponent = () => {
   const navigation = useNavigation();
+  const {
+    state: { medications },
+  } = useContext(MedicationContext);
+
   // This prevents the "Cannot read property 'medications' of undefined" crash.
 
-  if (!data || data.length === 0 || !data[0]?.medications) {
+  if (!medications || medications.length === 0) {
     return (
       <View style={styles.center}>
         <Text style={styles.loadingText}>No medications found...</Text>
@@ -22,15 +26,24 @@ const ListComponent = ({ data }) => {
     );
   }
 
+  const refreshData = () => {
+    console.log(
+      "List received notice from detail/edit screen. Refreshing data...",
+    );
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={data[0].medications}
+        data={medications}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("MedicationDetail", { med: item })
+              navigation.navigate("MedicationDetail", {
+                med: item,
+                onGoBack: refreshData, // Pass the refresh
+              })
             }
           >
             <MedicationCard
