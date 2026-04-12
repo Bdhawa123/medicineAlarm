@@ -21,8 +21,28 @@ const MedicationEditScreen = ({ route, navigation }) => {
     }));
   };
 
+  const computeNextScheduled = (startDateTime, intervalHours) => {
+    const intervalNum = parseInt(intervalHours, 10);
+    if (isNaN(intervalNum) || intervalNum <= 0) return null;
+
+    const intervalMs = intervalNum * 60 * 60 * 1000;
+    const base = startDateTime ? new Date(startDateTime) : new Date();
+    let next = new Date(base.getTime() + intervalMs);
+
+    // Advance until next dose is in the future
+    const now = Date.now();
+    while (next.getTime() <= now) {
+      next = new Date(next.getTime() + intervalMs);
+    }
+    return next.toISOString();
+  };
+
   const handleUpdate = () => {
-    editMedication(form);
+    const nextScheduled =
+      computeNextScheduled(form.schedule?.startDateTime, form.schedule?.intervalHours)
+      ?? form.nextScheduled;
+
+    editMedication({ ...form, nextScheduled });
     navigation.goBack();
   };
 

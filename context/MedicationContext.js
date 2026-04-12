@@ -46,8 +46,46 @@ const deleteMedication = (dispatch) => (id) => {
   dispatch({ type: "DELETE_MEDICATION", payload: { id } });
   cancelMedicationAlarm(id);
 };
+
+const takeMedication = (dispatch) => (medication) => {
+  // 1. Reduce inventory (don't go below 0)
+  const remaining = Math.max(0, medication.inventory.remaining - 1);
+  
+  // 2. Update lastTaken to exact current time
+  const lastTaken = new Date().toISOString();
+
+  // 3. Compute the nextScheduled date advancing from the start rhythm
+  let nextScheduled = medication.nextScheduled;
+  const intervalNum = parseInt(medication.schedule?.intervalHours, 10);
+  
+  if (!isNaN(intervalNum) && intervalNum > 0) {
+    const intervalMs = intervalNum * 60 * 60 * 1000;
+    const base = medication.schedule?.startDateTime ? new Date(medication.schedule.startDateTime) : new Date();
+    let next = new Date(base.getTime() + intervalMs);
+
+    const now = Date.now();
+    while (next.getTime() <= now) {
+      next = new Date(next.getTime() + intervalMs);
+    }
+    nextScheduled = next.toISOString();
+  }
+
+  // Set the newly updated object
+  const updatedMed = {
+    ...medication,
+    inventory: { ...medication.inventory, remaining },
+    lastTaken,
+    nextScheduled
+  };
+
+  // Logically, taking a med works identically to editing its data explicitly
+  dispatch({ type: "EDIT_MEDICATION", payload: updatedMed });
+  
+  // Advance the push notification alarm!
+  scheduleMedicationAlarm(updatedMed);
+};
 const INITIAL_EMPTY_STATE = {
-  id: Math.random().toString(36).substr(2, 9),
+  id: "",
   name: "",
   dosage: "",
   instructions: "",
@@ -68,7 +106,7 @@ const INITIAL_EMPTY_STATE = {
 
 export const { Provider, Context } = createDataContext(
   medicationReducer,
-  { addMedication, editMedication, deleteMedication },
+  { addMedication, editMedication, deleteMedication, takeMedication },
   {
     medications: initialData.medications,
     INITIAL_EMPTY_STATE: INITIAL_EMPTY_STATE,

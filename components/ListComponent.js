@@ -56,7 +56,7 @@ const ListComponent = () => {
             <MedicationCard
               item={item}
               index={index}
-              onDelete={(id) => console.log("Deleting:", id)}
+
             />
           </TouchableOpacity>
         )}

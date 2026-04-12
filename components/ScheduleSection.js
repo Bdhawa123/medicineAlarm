@@ -15,30 +15,10 @@ const ScheduleSection = ({ form, updateNested, setForm }) => {
 
   // 1. Fixed onTimeChange: Saves the time AND updates the next schedule
   const onTimeChange = (event, selectedDate) => {
-    console.log("Selected Time:", selectedDate);
     setShowPicker(false);
     if (selectedDate) {
-      const timeISO = selectedDate.toISOString();
-      console.log("Time in ISO Format:", timeISO);
-
-      setForm((prev) => {
-        // const interval = parseInt(prev.schedule.intervalHours, 10) || 0;
-        let nextDate = new Date(selectedDate);
-        if (prev.schedule.intervalHours) {
-          nextDate.setHours(
-            nextDate.getHours() + parseInt(prev.schedule.intervalHours, 10),
-          );
-        } else {
-          nextDate = null; // No interval means we can't calculate the next dose
-        }
-        console.log("Calculated Next Dose Time:", nextDate);
-
-        return {
-          ...prev,
-          lastTaken: timeISO, // Save the start time at root
-          nextScheduled: nextDate ? nextDate.toISOString() : null, // Save calculated next dose
-        };
-      });
+      // Update schedule.startDateTime only — lastTaken is untouched
+      updateNested("schedule", "startDateTime", selectedDate.toISOString());
     }
   };
 
@@ -52,29 +32,8 @@ const ScheduleSection = ({ form, updateNested, setForm }) => {
 
   // 2. Fixed setIntervalTime: No quotes, correct variable path
   const setIntervalTime = (Interval) => {
-    const intervalNum = parseInt(Interval, 10);
-
-    setForm((prev) => {
-      // Use lastTaken if it exists, otherwise use "now"
-      let baseDate = prev.lastTaken ? new Date(prev.lastTaken) : new Date();
-      let nextDate = new Date(baseDate);
-
-      if (!isNaN(intervalNum)) {
-        nextDate.setHours(nextDate.getHours() + intervalNum);
-      }
-
-      return {
-        ...prev,
-        schedule: {
-          ...prev.schedule,
-          intervalHours: Interval,
-        },
-        // Only update if the number is valid
-        nextScheduled: !isNaN(intervalNum)
-          ? nextDate.toISOString()
-          : prev.nextScheduled,
-      };
-    });
+    // Only update intervalHours — nextScheduled is computed on Save
+    updateNested("schedule", "intervalHours", Interval);
   };
 
   return (
@@ -88,23 +47,23 @@ const ScheduleSection = ({ form, updateNested, setForm }) => {
             style={styles.input}
             onPress={() => setShowPicker(true)}
           >
-            <Text style={{ color: form.lastTaken ? "#333" : "#aaa" }}>
-              {form.lastTaken
-                ? new Date(form.lastTaken).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
+            <Text style={{ color: form.schedule.startDateTime ? "#333" : "#aaa" }}>
+              {form.schedule.startDateTime
+                ? new Date(form.schedule.startDateTime).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
                 : "Select Start Time"}
             </Text>
           </TouchableOpacity>
 
           {showPicker && (
             <DateTimePicker
-              value={form.lastTaken ? new Date(form.lastTaken) : new Date()}
+              value={form.schedule.startDateTime ? new Date(form.schedule.startDateTime) : new Date()}
               mode="time"
-              is24Hour={false}
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={onTimeChange}
+              is24Hour={true}
             />
           )}
         </View>

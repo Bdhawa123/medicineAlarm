@@ -10,11 +10,14 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": [
+        "SCHEDULE_EXACT_ALARM"
+      ],
+      "package": "com.anonymous.medicationsalarm",
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.medicineAlarm"
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "favicon": "./assets/favicon.png"

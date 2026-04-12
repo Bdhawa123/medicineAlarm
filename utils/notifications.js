@@ -6,14 +6,37 @@ import { Platform } from 'react-native';
 // to show the alert even when the app is active
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
 
 export async function registerForPushNotificationsAsync() {
+  const settings = await Notifications.getPermissionsAsync();
+
+  if (!settings.granted) {
+    await Notifications.requestPermissionsAsync();
+  }
+
+  await Notifications.setNotificationCategoryAsync('medication_reminder', [
+    {
+      identifier: 'taken',
+      buttonTitle: 'Take Now',
+      options: { opensAppToForeground: true },
+    },
+    {
+      identifier: 'snooze',
+      buttonTitle: 'Push back 15 min',
+      options: { opensAppToForeground: false },
+    },
+  ]);
+
   if (Platform.OS === 'android') {
+
+    const { status } = await Notifications.getPermissionsAsync();
+    console.log("Notification status", status)
     await Notifications.setNotificationChannelAsync('default', {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
@@ -81,11 +104,15 @@ export async function scheduleMedicationAlarm(medication) {
         title: "Medication Reminder! 💊",
         body: `It's time to take ${medication.name} (${medication.dosage})`,
         sound: true,
-        data: { medicationId: medication.id },
+        categoryIdentifier: 'medication_reminder',
+        data: { medicationId: medication.id, medication },
+        autoDismiss: false,
+        sticky: true,
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-        seconds: seconds, // schedule in a specific amount of seconds from now
+        seconds: seconds,
+        channelId: 'default', // Android: must match registered channel
       },
     });
 
@@ -109,5 +136,32 @@ export async function resyncAllMedicationAlarms(medications) {
     }
   } catch (error) {
     console.error("Failed to resync alarms:", error);
+  }
+}
+
+export async function snoozeMedicationAlarm(medication, minutes = 15) {
+  try {
+    const seconds = minutes * 60;
+    const notificationId = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Medication Reminder (Snoozed)! 💊",
+        body: `It's time to take ${medication.name} (${medication.dosage})`,
+        sound: true,
+        categoryIdentifier: 'medication_reminder',
+        data: { medicationId: medication.id, medication },
+        autoDismiss: false,
+        sticky: true,
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+        seconds: seconds,
+        channelId: 'default', // Android: must match registered channel
+      },
+    });
+
+    console.log(`Snoozed notification for ${medication.name} in ${seconds} seconds`);
+    return notificationId;
+  } catch (error) {
+    console.error("Failed to schedule snoozed alarm:", error);
   }
 }

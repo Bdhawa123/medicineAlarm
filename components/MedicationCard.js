@@ -8,6 +8,7 @@ import {
   UIManager,
   Animated
 } from "react-native";
+import CustomAlert from "../utils/CustomAlert";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Context as MedicationContext } from "../context/MedicationContext";
 
@@ -15,15 +16,35 @@ if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const MedicationCard = ({ item, index, onDelete }) => {
-
+const MedicationCard = ({ item, index }) => {
   const {
-    state: { medications },
+    state: { medications }, deleteMedication, takeMedication
   } = useContext(MedicationContext);
   const med = medications.find((m) => m.id === item.id);
 
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [isTakeModalVisible, setTakeModalVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
+
+  const handleDelete = () => {
+    setDeleteModalVisible(true);
+  };
+
+  const confirmDelete = () => {
+    setDeleteModalVisible(false);
+    deleteMedication(med.id);
+  };
+
+  const handleTake = () => {
+    setTakeModalVisible(true);
+  };
+
+  const confirmTake = () => {
+    setTakeModalVisible(false);
+    takeMedication(med);
+  };
+
 
   const toggleExpand = () => {
     if (expanded) {
@@ -77,14 +98,40 @@ const MedicationCard = ({ item, index, onDelete }) => {
         <View style={styles.divider} />
         <Text style={styles.label}>INSTRUCTIONS</Text>
         <Text style={styles.descriptionText}>{med.instructions}</Text>
-        <TouchableOpacity
-          onPress={() => onDelete(med.id)}
-          style={styles.deleteBtn}
-        >
-          <MaterialIcons name="delete" size={20} color="#FF5252" />
-          <Text style={{ color: "#FF5252", marginLeft: 5 }}>Remove</Text>
-        </TouchableOpacity>
+        <View style={styles.actionRow}>
+          <TouchableOpacity onPress={handleTake} style={styles.takeBtn}>
+            <MaterialIcons name="check-circle" size={20} color="#4CAF50" />
+            <Text style={{ color: "#4CAF50", marginLeft: 5, fontWeight: "600" }}>Take Dose</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={handleDelete} style={styles.deleteBtn}>
+            <MaterialIcons name="delete" size={20} color="#FF5252" />
+            <Text style={{ color: "#FF5252", marginLeft: 5 }}>Remove</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
+
+      <CustomAlert
+        visible={isDeleteModalVisible}
+        title="Delete Medication"
+        message={`Are you sure you want to delete ${med.name}? This will also cancel its alarm.`}
+        cancelText="Cancel"
+        confirmText="Delete"
+        confirmColor="#E53935"
+        onCancel={() => setDeleteModalVisible(false)}
+        onConfirm={confirmDelete}
+      />
+
+      <CustomAlert
+        visible={isTakeModalVisible}
+        title="Take Medication"
+        message={`Record right now as the time you took ${med.name}? This will update the inventory and schedule your next alarm.`}
+        cancelText="Cancel"
+        confirmText="Take Dose"
+        confirmColor="#4CAF50" // Green to indicate positive action
+        onCancel={() => setTakeModalVisible(false)}
+        onConfirm={confirmTake}
+      />
     </View>
   );
 };
@@ -118,11 +165,20 @@ const styles = StyleSheet.create({
   divider: { height: 1, backgroundColor: "#eee", marginVertical: 10 },
   label: { fontSize: 10, fontWeight: "bold", color: "#aaa", marginBottom: 4 },
   descriptionText: { fontSize: 14, color: "#444" },
+  actionRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginTop: 15,
+    gap: 15,
+  },
+  takeBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   deleteBtn: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 10,
-    alignSelf: "flex-end",
   },
 });
 

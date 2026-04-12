@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -11,15 +11,28 @@ import { Context as MedicationContext } from "../context/MedicationContext";
 import {
   MaterialIcons,
 } from "@expo/vector-icons";
+import CustomAlert from "../utils/CustomAlert";
 
 const MedicationDetail = ({ route, navigation }) => {
   const { med, onGoBack } = route.params;
 
   const {
     state: { medications },
+    deleteMedication,
   } = useContext(MedicationContext);
 
   const medSelected = medications.find((medSel) => medSel.id === med.id);
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  const handleDelete = () => {
+    setDeleteModalVisible(true);
+  };
+
+  const confirmDelete = () => {
+    setDeleteModalVisible(false);
+    deleteMedication(medSelected.id);
+    navigation.goBack();
+  };
 
   const formatTime = (isoString) => {
     if (!isoString) return "Not set";
@@ -44,13 +57,19 @@ const MedicationDetail = ({ route, navigation }) => {
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>Medication Info</Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("EditMedication", { med: medSelected })
-          }
-        >
-          <MaterialIcons name="edit" size={24} color="#2196f3" />
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("EditMedication", { med: medSelected })
+            }
+            style={styles.headerBtn}
+          >
+            <MaterialIcons name="edit" size={24} color="#2196f3" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleDelete} style={styles.headerBtn}>
+            <MaterialIcons name="delete-outline" size={24} color="#E53935" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
@@ -135,6 +154,17 @@ const MedicationDetail = ({ route, navigation }) => {
           </View>
         )}
       </ScrollView>
+
+      <CustomAlert
+        visible={isDeleteModalVisible}
+        title="Delete Medication"
+        message={`Are you sure you want to delete ${medSelected.name}? This will also cancel its alarm.`}
+        cancelText="Cancel"
+        confirmText="Delete"
+        confirmColor="#E53935"
+        onCancel={() => setDeleteModalVisible(false)}
+        onConfirm={confirmDelete}
+      />
     </SafeAreaView>
   );
 };
@@ -144,10 +174,19 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  headerBtn: {
+    padding: 5,
+    marginLeft: 15,
   },
   headerTitle: { fontSize: 18, fontWeight: "700", color: "#333" },
   content: { padding: 20 },
