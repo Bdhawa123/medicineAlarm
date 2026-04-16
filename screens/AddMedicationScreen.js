@@ -7,9 +7,13 @@ import MedicationForm from "../components/MedicationForm";
 
 const AddMedicationScreen = ({ navigation }) => {
   const { addMedication, state } = useContext(MedicationContext);
-  const [form, setForm] = useState({
-    ...state.INITIAL_EMPTY_STATE,
-    id: Math.random().toString(36).substr(2, 9),
+  const [form, setForm] = useState(() => {
+    const id = Math.random().toString(36).substr(2, 9);
+    return {
+      ...state.INITIAL_EMPTY_STATE,
+      id,
+      qrCode: `MED-${id.toUpperCase()}`,
+    };
   });
 
   const computeNextScheduled = (startDateTime, intervalHours) => {

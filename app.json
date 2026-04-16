@@ -23,7 +23,13 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "@react-native-community/datetimepicker"
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "Access for medicine scanning",
+          "enableCodeScanner": true
+        }
+      ]
     ]
   }
 }

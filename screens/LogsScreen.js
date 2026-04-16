@@ -23,7 +23,15 @@ const LogsScreen = ({ navigation }) => {
       </View>
       <Text style={styles.medName}>Medication: {getMedicationName(item.medicationId)}</Text>
       <Text style={styles.medId}>ID: {item.medicationId}</Text>
-      <Text style={styles.method}>Verification Method: {item.verification?.method || 'None'}</Text>
+      <View style={styles.methodRow}>
+        <Text style={styles.method}>Verification: {item.verification?.method || 'None'}</Text>
+        {item.verification?.isVerified && (
+          <View style={styles.verifiedBadge}>
+            <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
+            <Text style={styles.verifiedText}>Verified</Text>
+          </View>
+        )}
+      </View>
     </View>
   );
 
@@ -107,10 +115,29 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#555',
   },
+  methodRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 4,
+  },
   method: {
     fontSize: 14,
     color: '#333',
-    marginTop: 4,
+  },
+  verifiedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E8F5E9',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 12,
+    gap: 4,
+  },
+  verifiedText: {
+    fontSize: 12,
+    color: '#4CAF50',
+    fontWeight: 'bold',
   },
   emptyText: {
     textAlign: 'center',

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -10,8 +10,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Context as MedicationContext } from "../context/MedicationContext";
 import {
   MaterialIcons,
+  Ionicons,
 } from "@expo/vector-icons";
 import CustomAlert from "../utils/CustomAlert";
+import MedicationQRCode from "../components/MedicationQRCode";
 
 const MedicationDetail = ({ route, navigation }) => {
   const { med, onGoBack } = route.params;
@@ -33,6 +35,7 @@ const MedicationDetail = ({ route, navigation }) => {
     deleteMedication(medSelected.id);
     navigation.goBack();
   };
+
 
   const formatTime = (isoString) => {
     if (!isoString) return "Not set";
@@ -153,6 +156,9 @@ const MedicationDetail = ({ route, navigation }) => {
             <Text style={styles.criticalText}>CRITICAL MEDICATION</Text>
           </View>
         )}
+
+        {/* Verification QR Section */}
+        <MedicationQRCode medication={medSelected} />
 
         {/* Recent Logs Section */}
         <View style={styles.section}>
@@ -278,7 +284,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   criticalText: { color: "#D32F2F", fontWeight: "bold", marginLeft: 8 },
-  
+
   logItem: {
     backgroundColor: "#fafafa",
     borderRadius: 12,
@@ -336,6 +342,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 14,
   },
+
 });
 
 export default MedicationDetail;

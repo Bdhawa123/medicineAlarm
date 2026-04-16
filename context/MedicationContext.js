@@ -25,6 +25,12 @@ const medicationReducer = (state, action) => {
         ),
       };
 
+    case "ADD_LOG":
+      return {
+        ...state,
+        confirmationLogs: [action.payload, ...(state.confirmationLogs || [])],
+      };
+
     case "ADD_ERROR":
       return { ...state, errorMessage: action.payload };
 
@@ -48,7 +54,7 @@ const deleteMedication = (dispatch) => (id) => {
   cancelMedicationAlarm(id);
 };
 
-const takeMedication = (dispatch) => (medication) => {
+const takeMedication = (dispatch) => (medication, verification = { method: "MANUAL", source: "APP", capturedData: null, isVerified: true }) => {
   // 1. Reduce inventory (don't go below 0)
   const remaining = Math.max(0, medication.inventory.remaining - 1);
   
@@ -81,6 +87,21 @@ const takeMedication = (dispatch) => (medication) => {
 
   // Logically, taking a med works identically to editing its data explicitly
   dispatch({ type: "EDIT_MEDICATION", payload: updatedMed });
+
+  // 4. Create a new log entry
+  const newLog = {
+    logId: `L-${Date.now()}`,
+    medicationId: medication.id,
+    status: "Taken",
+    timestamp: lastTaken,
+    verification: verification,
+    skipped: {
+      isSkipped: false,
+      date: null
+    }
+  };
+
+  dispatch({ type: "ADD_LOG", payload: newLog });
   
   // Advance the push notification alarm!
   scheduleMedicationAlarm(updatedMed);
@@ -92,6 +113,7 @@ const INITIAL_EMPTY_STATE = {
   instructions: "",
   color: "#4A90E2",
   icon: "pill",
+  qrCode: "",
   inventory: { remaining: 0, total: 0, refillAlertThreshold: 5 },
   schedule: {
     type: "fixed",

@@ -6,11 +6,14 @@ import {
   TouchableOpacity,
   Platform,
   UIManager,
-  Animated
+  Animated,
+  Alert
 } from "react-native";
 import CustomAlert from "../utils/CustomAlert";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Context as MedicationContext } from "../context/MedicationContext";
+import * as ImagePicker from 'expo-image-picker';
+import RNQRGenerator from 'rn-qr-generator';
 
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -42,7 +45,59 @@ const MedicationCard = ({ item, index }) => {
 
   const confirmTake = () => {
     setTakeModalVisible(false);
-    takeMedication(med);
+    // Manual confirmation removed as per user request
+    Alert.alert('Verification Required', 'Please use the QR verification to record this dose.');
+  };
+
+  const handleVerifyWithImage = async () => {
+    try {
+      // 1. Request permission
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission Denied', 'We need access to your gallery to verify the QR code.');
+        return;
+      }
+
+      // 2. Pick image
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        quality: 1,
+      });
+
+      if (result.canceled || !result.assets || result.assets.length === 0) return;
+
+      setTakeModalVisible(false); // Close the choice modal
+
+      // 3. Scan QR from image
+      const imageUri = result.assets[0].uri;
+      const response = await RNQRGenerator.detect({ uri: imageUri });
+
+      const { values } = response;
+
+      if (values && values.length > 0) {
+        const detectedCode = values[0];
+        const targetCode = med.qrCode || `MED-${med.id}`;
+
+        if (detectedCode === targetCode) {
+          // Success!
+          takeMedication(med, { 
+            method: "GALLERY", 
+            source: "APP", 
+            isVerified: true,
+            capturedData: detectedCode
+          });
+          Alert.alert('Success', 'Medication verified and recorded!');
+        } else {
+          Alert.alert('Verification Failed', 'The QR code does not match this medication.');
+        }
+      } else {
+        Alert.alert('No QR Code Found', 'We could not find a QR code in the selected image.');
+      }
+    } catch (error) {
+      console.error("Verification error:", error);
+      Alert.alert('Error', 'An error occurred during verification.');
+    }
   };
 
 
@@ -124,13 +179,13 @@ const MedicationCard = ({ item, index }) => {
 
       <CustomAlert
         visible={isTakeModalVisible}
-        title="Take Medication"
-        message={`Record right now as the time you took ${med.name}? This will update the inventory and schedule your next alarm.`}
+        title="Verify Medication"
+        message={`Verification is required to record ${med.name}. Please upload the medication's QR code image.`}
         cancelText="Cancel"
-        confirmText="Take Dose"
-        confirmColor="#4CAF50" // Green to indicate positive action
+        secondaryConfirmText="Verify with QR Image"
+        secondaryConfirmColor="#4CAF50"
         onCancel={() => setTakeModalVisible(false)}
-        onConfirm={confirmTake}
+        onSecondaryConfirm={handleVerifyWithImage}
       />
     </View>
   );

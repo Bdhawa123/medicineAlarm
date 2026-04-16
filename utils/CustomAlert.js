@@ -14,9 +14,12 @@ const CustomAlert = ({
   message,
   onCancel,
   onConfirm,
+  onSecondaryConfirm,
   cancelText = "Cancel",
   confirmText = "Confirm",
-  confirmColor = "#2196f3", // Default to blue, can override for destructive actions
+  secondaryConfirmText = "Verify QR",
+  confirmColor = "#2196f3",
+  secondaryConfirmColor = "#4CAF50",
 }) => {
   return (
     <Modal
@@ -40,12 +43,23 @@ const CustomAlert = ({
                   <Text style={styles.cancelText}>{cancelText}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[styles.button, { backgroundColor: confirmColor }]}
-                  onPress={onConfirm}
-                >
-                  <Text style={styles.confirmText}>{confirmText}</Text>
-                </TouchableOpacity>
+                {onSecondaryConfirm && (
+                  <TouchableOpacity
+                    style={[styles.button, { backgroundColor: secondaryConfirmColor }]}
+                    onPress={onSecondaryConfirm}
+                  >
+                    <Text style={styles.confirmText}>{secondaryConfirmText}</Text>
+                  </TouchableOpacity>
+                )}
+
+                {onConfirm && (
+                  <TouchableOpacity
+                    style={[styles.button, { backgroundColor: confirmColor }]}
+                    onPress={onConfirm}
+                  >
+                    <Text style={styles.confirmText}>{confirmText}</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           </TouchableWithoutFeedback>
