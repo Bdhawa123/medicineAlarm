@@ -17,7 +17,7 @@ const MedicationDetail = ({ route, navigation }) => {
   const { med, onGoBack } = route.params;
 
   const {
-    state: { medications },
+    state: { medications, confirmationLogs },
     deleteMedication,
   } = useContext(MedicationContext);
 
@@ -153,6 +153,36 @@ const MedicationDetail = ({ route, navigation }) => {
             <Text style={styles.criticalText}>CRITICAL MEDICATION</Text>
           </View>
         )}
+
+        {/* Recent Logs Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionHeader}>Recent Logs</Text>
+          {confirmationLogs && confirmationLogs.filter(log => log.medicationId === medSelected.id).length > 0 ? (
+            confirmationLogs
+              .filter(log => log.medicationId === medSelected.id)
+              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+              .slice(0, 5) // Show only latest 5 for brevity
+              .map((log) => (
+                <View key={log.logId} style={styles.logItem}>
+                  <View style={styles.logStatusIndicator}>
+                    <View style={[styles.statusDot, { backgroundColor: log.status === 'Taken' ? '#4CAF50' : '#F44336' }]} />
+                    <Text style={styles.logStatusText}>{log.status}</Text>
+                  </View>
+                  <Text style={styles.logTimeText}>{formatTime(log.timestamp)}</Text>
+                  {log.verification?.method && (
+                    <Text style={styles.logMethodText}>Via: {log.verification.method}</Text>
+                  )}
+                </View>
+              ))
+          ) : (
+            <Text style={styles.emptyLogsText}>No logs recorded for this medication.</Text>
+          )}
+          {confirmationLogs && confirmationLogs.filter(log => log.medicationId === medSelected.id).length > 5 && (
+            <TouchableOpacity onPress={() => navigation.navigate("LogsScreen")} style={styles.viewAllBtn}>
+              <Text style={styles.viewAllText}>View All Logs</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </ScrollView>
 
       <CustomAlert
@@ -248,6 +278,64 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   criticalText: { color: "#D32F2F", fontWeight: "bold", marginLeft: 8 },
+  
+  logItem: {
+    backgroundColor: "#fafafa",
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#f0f0f0",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  logStatusIndicator: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 8,
+  },
+  logStatusText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#333",
+  },
+  logTimeText: {
+    fontSize: 13,
+    color: "#777",
+    flex: 1,
+    textAlign: "right",
+  },
+  logMethodText: {
+    fontSize: 11,
+    color: "#999",
+    position: "absolute",
+    bottom: 2,
+    right: 12,
+  },
+  emptyLogsText: {
+    fontSize: 14,
+    color: "#999",
+    fontStyle: "italic",
+    textAlign: "center",
+    paddingVertical: 10,
+  },
+  viewAllBtn: {
+    marginTop: 5,
+    alignItems: "center",
+    padding: 10,
+  },
+  viewAllText: {
+    color: "#2196f3",
+    fontWeight: "600",
+    fontSize: 14,
+  },
 });
 
 export default MedicationDetail;

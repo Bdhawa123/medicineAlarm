@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext } from "react";
 import initialData from "../mockDB/DBjson.json";
+import logData from "../mockDB/Log.json";
 import createDataContext from "./createDataContext";
 import { scheduleMedicationAlarm, cancelMedicationAlarm } from "../utils/notifications";
 
@@ -109,6 +110,7 @@ export const { Provider, Context } = createDataContext(
   { addMedication, editMedication, deleteMedication, takeMedication },
   {
     medications: initialData.medications,
+    confirmationLogs: logData.confirmationLogs,
     INITIAL_EMPTY_STATE: INITIAL_EMPTY_STATE,
     errorMessage: "",
   },

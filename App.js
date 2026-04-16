@@ -8,6 +8,7 @@ import AlarmScreen from "./screens/AlarmScreen";
 import MedicationDetail from "./screens/MedicalDetailScreen";
 import AddMedicationScreen from "./screens/AddMedicationScreen";
 import MedicationEditScreen from "./screens/MedicationEditScreen";
+import LogsScreen from "./screens/LogsScreen";
 
 import { Provider as MedicationProvider, Context as MedicationContext } from "./context/MedicationContext";
 import { NavigationContainer } from "@react-navigation/native";
@@ -68,6 +69,10 @@ function Main() {
         <Stack.Screen
           name="EditMedication"
           component={MedicationEditScreen}
+        />
+        <Stack.Screen
+          name="LogsScreen"
+          component={LogsScreen}
         />
         <Stack.Screen
           name="AddMedication"

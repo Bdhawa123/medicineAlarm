@@ -1,12 +1,18 @@
 import React, { useContext } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import ListComponent from "../components/ListComponent";
 
 const AlarmScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.appWrapper}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>My Alarms</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("LogsScreen")} style={styles.logsButton}>
+          <Ionicons name="list" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
       <ListComponent />
       <TouchableOpacity
         style={styles.fab}
@@ -23,6 +29,20 @@ const styles = StyleSheet.create({
   appWrapper: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  logsButton: {
+    padding: 8,
   },
   fab: {
     position: "absolute", // Key for floating

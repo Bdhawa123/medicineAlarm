@@ -1,0 +1,164 @@
+{
+    "confirmationLogs": [
+        {
+            "logId": "L-001-AMX",
+            "medicationId": "550e8400-e29b-41d4-a716-446655440000",
+            "status": "Taken",
+            "timestamp": "2026-04-16T08:02:15Z",
+            "verification": {
+                "method": "QR",
+                "source": "CAMERA",
+                "capturedData": "AMX-500-B992",
+                "isVerified": true
+            },
+            "skipped": {
+                "isSkipped": false,
+                "date": null
+            }
+        },
+        {
+            "logId": "L-002-ATO",
+            "medicationId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+            "status": "Taken",
+            "timestamp": "2026-04-16T21:05:00Z",
+            "verification": {
+                "method": "PHOTO",
+                "source": "UPLOAD",
+                "capturedData": "storage/uploads/old_pill_pic.jpg",
+                "isVerified": false
+            },
+            "skipped": {
+                "isSkipped": false,
+                "date": null
+            }
+        },
+        {
+            "logId": "L-003-MET",
+            "medicationId": "11d2e5a1-3a22-4c2a-8f55-01b33d456789",
+            "status": "Taken",
+            "timestamp": "2026-04-16T08:45:30Z",
+            "verification": {
+                "method": "QR",
+                "source": "CAMERA",
+                "capturedData": "MET-500-A1",
+                "isVerified": true
+            },
+            "skipped": {
+                "isSkipped": false,
+                "date": null
+            }
+        },
+        {
+            "logId": "L-004-LIS",
+            "medicationId": "a1b2c3d4-e5f6-4a5b-bcde-f1e2d3c4b5a6",
+            "status": "Taken",
+            "timestamp": "2026-04-16T07:02:10Z",
+            "verification": {
+                "method": "PHOTO",
+                "source": "CAMERA",
+                "capturedData": "storage/logs/live_lisinopril.jpg",
+                "isVerified": true
+            },
+            "skipped": {
+                "isSkipped": false,
+                "date": null
+            }
+        },
+        {
+            "logId": "L-005-VD3",
+            "medicationId": "f2a3b4c5-d6e7-4f8g-9h0i-j1k2l3m4n5o6",
+            "status": "Skipped",
+            "timestamp": "2026-04-16T12:10:00Z",
+            "verification": {
+                "method": null,
+                "source": null,
+                "capturedData": null,
+                "isVerified": false
+            },
+            "skipped": {
+                "isSkipped": true,
+                "date": "2026-04-16T12:09:45Z"
+            }
+        },
+        {
+            "logId": "L-006-ALB",
+            "medicationId": "e4d5c6b7-a8b9-4c0d-e1f2-3g4h5i6j7k8l",
+            "status": "Taken",
+            "timestamp": "2026-04-16T14:30:00Z",
+            "verification": {
+                "method": "PHOTO",
+                "source": "CAMERA",
+                "capturedData": "storage/logs/inhaler_use.jpg",
+                "isVerified": true
+            },
+            "skipped": {
+                "isSkipped": false,
+                "date": null
+            }
+        },
+        {
+            "logId": "L-007-LEV",
+            "medicationId": "9a8b7c6d-5e4f-3g2h-1i0j-k9l8m7n6o5p4",
+            "status": "Taken",
+            "timestamp": "2026-04-16T06:31:45Z",
+            "verification": {
+                "method": "QR",
+                "source": "CAMERA",
+                "capturedData": "LEV-75-MCG",
+                "isVerified": true
+            },
+            "skipped": {
+                "isSkipped": false,
+                "date": null
+            }
+        },
+        {
+            "logId": "L-008-IBU",
+            "medicationId": "z1x2c3v4-b5n6-m7l8-k9j0-h1g2f3e4d5s6",
+            "status": "Taken",
+            "timestamp": "2026-04-16T11:05:00Z",
+            "verification": {
+                "method": "PHOTO",
+                "source": "CAMERA",
+                "capturedData": "storage/logs/back_pain_med.jpg",
+                "isVerified": true
+            },
+            "skipped": {
+                "isSkipped": false,
+                "date": null
+            }
+        },
+        {
+            "logId": "L-009-WAR",
+            "medicationId": "q1w2e3r4-t5y6-u7i8-o9p0-a1s2d3f4g5h6",
+            "status": "Taken",
+            "timestamp": "2026-04-16T18:01:20Z",
+            "verification": {
+                "method": "QR",
+                "source": "CAMERA",
+                "capturedData": "WAR-5MG-001",
+                "isVerified": true
+            },
+            "skipped": {
+                "isSkipped": false,
+                "date": null
+            }
+        },
+        {
+            "logId": "L-010-SER",
+            "medicationId": "m9n8b7v6-c5x4-z3a2-s1d0-f9g8h7j6k5l4",
+            "status": "Taken",
+            "timestamp": "2026-04-16T09:05:12Z",
+            "verification": {
+                "method": "PHOTO",
+                "source": "CAMERA",
+                "capturedData": "storage/logs/morning_routine.jpg",
+                "isVerified": true
+            },
+            "skipped": {
+                "isSkipped": false,
+                "date": null
+            }
+        }
+    ]
+}
