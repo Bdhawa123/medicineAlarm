@@ -23,7 +23,7 @@ export async function registerForPushNotificationsAsync() {
   await Notifications.setNotificationCategoryAsync('medication_reminder', [
     {
       identifier: 'taken',
-      buttonTitle: 'Take Now',
+      buttonTitle: 'Verify & Take',
       options: { opensAppToForeground: true },
     },
     {

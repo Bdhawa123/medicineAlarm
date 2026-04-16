@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Context as MedicationContext } from "../context/MedicationContext";
 import * as ImagePicker from 'expo-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
+import { snoozeMedicationAlarm } from '../utils/notifications';
 
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -21,7 +22,10 @@ if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental
 
 const MedicationCard = ({ item, index }) => {
   const {
-    state: { medications }, deleteMedication, takeMedication
+    state: { medications, pendingVerificationId }, 
+    deleteMedication, 
+    takeMedication,
+    setPendingVerification
   } = useContext(MedicationContext);
   const med = medications.find((m) => m.id === item.id);
 
@@ -29,6 +33,15 @@ const MedicationCard = ({ item, index }) => {
   const [isTakeModalVisible, setTakeModalVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (pendingVerificationId && pendingVerificationId === med.id) {
+      // Clear the global flag so it doesn't trigger again
+      setPendingVerification(null);
+      // Trigger the verification flow with notification flag
+      handleVerifyWithImage(true);
+    }
+  }, [pendingVerificationId, med.id]);
 
   const handleDelete = () => {
     setDeleteModalVisible(true);
@@ -49,12 +62,16 @@ const MedicationCard = ({ item, index }) => {
     Alert.alert('Verification Required', 'Please use the QR verification to record this dose.');
   };
 
-  const handleVerifyWithImage = async () => {
+  const handleVerifyWithImage = async (isNotificationTriggered = false) => {
     try {
       // 1. Request permission
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
         Alert.alert('Permission Denied', 'We need access to your gallery to verify the QR code.');
+        if (isNotificationTriggered) {
+          await snoozeMedicationAlarm(med, 15);
+          Alert.alert('Snoozed', 'Verification permission denied. Alarm snoozed for 15 minutes.');
+        }
         return;
       }
 
@@ -65,7 +82,13 @@ const MedicationCard = ({ item, index }) => {
         quality: 1,
       });
 
-      if (result.canceled || !result.assets || result.assets.length === 0) return;
+      if (result.canceled || !result.assets || result.assets.length === 0) {
+        if (isNotificationTriggered) {
+          await snoozeMedicationAlarm(med, 15);
+          Alert.alert('Snoozed', 'Verification canceled. Alarm snoozed for 15 minutes.');
+        }
+        return;
+      }
 
       setTakeModalVisible(false); // Close the choice modal
 
@@ -90,13 +113,24 @@ const MedicationCard = ({ item, index }) => {
           Alert.alert('Success', 'Medication verified and recorded!');
         } else {
           Alert.alert('Verification Failed', 'The QR code does not match this medication.');
+          if (isNotificationTriggered) {
+            await snoozeMedicationAlarm(med, 15);
+            Alert.alert('Snoozed', 'QR mismatch. Alarm snoozed for 15 minutes.');
+          }
         }
       } else {
         Alert.alert('No QR Code Found', 'We could not find a QR code in the selected image.');
+        if (isNotificationTriggered) {
+          await snoozeMedicationAlarm(med, 15);
+          Alert.alert('Snoozed', 'No QR code found. Alarm snoozed for 15 minutes.');
+        }
       }
     } catch (error) {
       console.error("Verification error:", error);
       Alert.alert('Error', 'An error occurred during verification.');
+      if (isNotificationTriggered) {
+        await snoozeMedicationAlarm(med, 15);
+      }
     }
   };
 

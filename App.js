@@ -30,7 +30,7 @@ if (TextInput.defaultProps) {
 }
 
 function Main() {
-  const { takeMedication } = useContext(MedicationContext);
+  const { setPendingVerification } = useContext(MedicationContext);
 
   useEffect(() => {
     registerForPushNotificationsAsync();
@@ -48,7 +48,7 @@ function Main() {
         
         // Trigger context update to actually take the medication
         if (medication) {
-          takeMedication(medication);
+          setPendingVerification(medication.id);
         }
       }
     });

@@ -6,6 +6,8 @@ import { scheduleMedicationAlarm, cancelMedicationAlarm } from "../utils/notific
 
 const medicationReducer = (state, action) => {
   switch (action.type) {
+    case "SET_PENDING_VERIFICATION":
+      return { ...state, pendingVerificationId: action.payload };
     case "ADD_MEDICATION":
       return { ...state, medications: [action.payload, ...state.medications] };
 
@@ -106,6 +108,10 @@ const takeMedication = (dispatch) => (medication, verification = { method: "MANU
   // Advance the push notification alarm!
   scheduleMedicationAlarm(updatedMed);
 };
+const setPendingVerification = (dispatch) => (id) => {
+  dispatch({ type: "SET_PENDING_VERIFICATION", payload: id });
+};
+
 const INITIAL_EMPTY_STATE = {
   id: "",
   name: "",
@@ -129,10 +135,11 @@ const INITIAL_EMPTY_STATE = {
 
 export const { Provider, Context } = createDataContext(
   medicationReducer,
-  { addMedication, editMedication, deleteMedication, takeMedication },
+  { addMedication, editMedication, deleteMedication, takeMedication, setPendingVerification },
   {
     medications: initialData.medications,
     confirmationLogs: logData.confirmationLogs,
+    pendingVerificationId: null,
     INITIAL_EMPTY_STATE: INITIAL_EMPTY_STATE,
     errorMessage: "",
   },
